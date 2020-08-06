@@ -1,8 +1,8 @@
 ﻿using Liberator.Driver.Enums;
+using Liberator.Driver.Preferences;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -11,7 +11,7 @@ namespace Liberator.Driver.BrowserControl
     internal class EdgeDriverControl : IBrowserControl
     {
         #region Public Properties
-        
+
         /// <summary>
         /// Holds the instantiated Edge Driver
         /// </summary>
@@ -27,11 +27,6 @@ namespace Liberator.Driver.BrowserControl
         /// </summary>
         public EdgeDriverService Service { get; set; }
 
-        /// <summary>
-        /// The maximum amount of time to wait between commands
-        /// </summary>
-        public TimeSpan CommandTimeout { get; set; }
-
         #endregion
 
         #region Constructors
@@ -41,10 +36,26 @@ namespace Liberator.Driver.BrowserControl
         /// </summary>
         public EdgeDriverControl()
         {
-            string timeout = Preferences.Preferences.GetPreferenceSetting("Timeout");
-            if (!timeout.Contains(",")) { timeout = "0,0,0,10,0"; }
-            var to = timeout.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            CommandTimeout = new TimeSpan(Convert.ToInt32(to[0]), Convert.ToInt32(to[1]), Convert.ToInt32(to[2]), Convert.ToInt32(to[3]), Convert.ToInt32(to[4]));
+            Options = new EdgeOptions();
+        }
+
+        /// <summary>
+        /// Allows the specification of Edge Driver settings
+        /// </summary>
+        /// <param name="edgeSettings">The settings file to be used.</param>
+        public EdgeDriverControl(EdgeSettings edgeSettings)
+        {
+            Options = new EdgeOptions();
+
+            if (edgeSettings != null)
+            {
+                Edge.HideCommandPromptWindow = edgeSettings.HideCommandPromptWindow;
+                Edge.Host = edgeSettings.Host;
+                Edge.Package = edgeSettings.Package;
+                Edge.Port = edgeSettings.Port;
+                Edge.SuppressInitialDiagnosticInformation = edgeSettings.SuppressInitialDiagnosticInformation;
+                Edge.UseVerboseLogging = edgeSettings.UseVerboseLogging;
+            }
         }
 
         #endregion
@@ -59,29 +70,26 @@ namespace Liberator.Driver.BrowserControl
         {
             try
             {
-                Process[] webdrivers = Process.GetProcessesByName("MicrosoftWebDriver");
-                foreach (Process driver in webdrivers) { driver.Kill(); }
-                SetEdgeOptions();
                 SetEdgeDriverService();
                 Assembly assembly = Assembly.GetExecutingAssembly();
-                Driver = new EdgeDriver(Preferences.Preferences.GetPreferenceSetting("Edge_DriverPath"), Options, CommandTimeout);
+                Driver = new EdgeDriver(Directory.GetParent(BaseSettings.EdgeDriverLocation).FullName, Options, BaseSettings.Timeout);
                 return Driver;
             }
             catch (Exception ex)
             {
-                switch (Preferences.Preferences.DebugLevel)
+                switch (BaseSettings.DebugLevel)
                 {
                     case EnumConsoleDebugLevel.Human:
-                        Console.WriteLine("Could not start Edge driver.");
-                        Console.WriteLine("Please investigate the changes you have made to your config file.");
+                        Console.Out.WriteLine("Could not start Edge driver.");
+                        Console.Out.WriteLine("Please investigate the changes you have made to your config file.");
                         break;
                     case EnumConsoleDebugLevel.NotSpecified:
                     case EnumConsoleDebugLevel.Message:
-                        Console.WriteLine(ex.Message);
+                        Console.Out.WriteLine(ex.Message);
                         break;
                     case EnumConsoleDebugLevel.StackTrace:
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine(ex.StackTrace);
+                        Console.Out.WriteLine(ex.Message);
+                        Console.Out.WriteLine(ex.StackTrace);
                         break;
                 }
                 return null;
@@ -94,70 +102,27 @@ namespace Liberator.Driver.BrowserControl
 
 
         /// <summary>
-        /// Sets the Chrome Options from the app.config file
-        /// </summary>
-        private void SetEdgeOptions()
-        {
-            try
-            {
-                EdgePageLoadStrategy epls = EdgePageLoadStrategy.Default;
-                Enum.TryParse(Preferences.Preferences.GetPreferenceSetting("Edge_PageLoadStrategy"), out epls);
-                EdgeOptions options = new EdgeOptions()
-                {
-                    PageLoadStrategy = epls
-                };
-                Options = options;
-            }
-            catch (Exception ex)
-            {
-                switch (Preferences.Preferences.DebugLevel)
-                {
-                    case EnumConsoleDebugLevel.Human:
-                        Console.WriteLine("Could not configure the Edge Driver Options settings.");
-                        break;
-                    case EnumConsoleDebugLevel.NotSpecified:
-                    case EnumConsoleDebugLevel.Message:
-                        Console.WriteLine(ex.Message);
-                        break;
-                    case EnumConsoleDebugLevel.StackTrace:
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine(ex.StackTrace);
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
         /// Sets the Chrome Driver Service setting from the app.config file
         /// </summary>
         private void SetEdgeDriverService()
         {
             try
             {
-                bool command = false;
-                Int32 port = 4444;
-                bool sidi = false;
-                bool verbose = false;
 
-                Boolean.TryParse(Preferences.Preferences.GetPreferenceSetting("Edge_HideCommandPromptWindow"), out command);
-                Int32.TryParse(Preferences.Preferences.GetPreferenceSetting("Edge_Port"), out port);
-                Boolean.TryParse(Preferences.Preferences.GetPreferenceSetting("Edge_SuppressInitialDiagnosticInformation"), out sidi);
-                Boolean.TryParse(Preferences.Preferences.GetPreferenceSetting("Edge_UseVerboseLogging"), out verbose);
+                bool.TryParse(Edge.HideCommandPromptWindow, out bool command);
+                int.TryParse(Edge.Port, out int port);
+                bool.TryParse(Edge.SuppressInitialDiagnosticInformation, out bool sidi);
+                bool.TryParse(Edge.UseVerboseLogging, out bool verbose);
 
+                string driverLocation = Directory.GetParent(BaseSettings.EdgeDriverLocation).FullName;
 
-                string driverLocation = Preferences.Preferences.GetPreferenceSetting("Edge_DriverPath");
-                string path = null;
+                string host = Edge.Host;
+                string package = Edge.Package;
 
-                if (driverLocation != "" || driverLocation != null) { path = Preferences.Preferences.DriverPath; }
-                else { path = driverLocation; }
-
-                string host = Preferences.Preferences.GetPreferenceSetting("Edge_Host");
-                string package = Preferences.Preferences.GetPreferenceSetting("Edge_Package");
-
-                EdgeDriverService service = EdgeDriverService.CreateDefaultService(path);
+                EdgeDriverService service = EdgeDriverService.CreateDefaultService(driverLocation);
                 service.HideCommandPromptWindow = command;
-                if (host.Contains(@"\")) { service.Host = host; }
-                if (host.Contains(@"\")) { service.Package = package; }
+                service.Host = host ?? null;
+                service.Package = package ?? null;
                 service.Port = Convert.ToInt32(port);
                 service.SuppressInitialDiagnosticInformation = sidi;
                 service.UseVerboseLogging = verbose;
@@ -165,18 +130,18 @@ namespace Liberator.Driver.BrowserControl
             }
             catch (Exception ex)
             {
-                switch (Preferences.Preferences.DebugLevel)
+                switch (BaseSettings.DebugLevel)
                 {
                     case EnumConsoleDebugLevel.Human:
-                        Console.WriteLine("Could not configure the Edge Driver Service settings.");
+                        Console.Out.WriteLine("Could not configure the Edge Driver Service settings.");
                         break;
                     case EnumConsoleDebugLevel.NotSpecified:
                     case EnumConsoleDebugLevel.Message:
-                        Console.WriteLine(ex.Message);
+                        Console.Out.WriteLine(ex.Message);
                         break;
                     case EnumConsoleDebugLevel.StackTrace:
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine(ex.StackTrace);
+                        Console.Out.WriteLine(ex.Message);
+                        Console.Out.WriteLine(ex.StackTrace);
                         break;
                 }
             }

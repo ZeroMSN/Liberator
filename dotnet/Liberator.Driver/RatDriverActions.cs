@@ -1,8 +1,8 @@
-﻿using OpenQA.Selenium;
+﻿using Liberator.Driver.Enums;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using System;  
+using System;
 using System.Collections.Generic;
-using Liberator.Driver.Enums;
 using System.Runtime.InteropServices;
 
 namespace Liberator.Driver
@@ -16,7 +16,7 @@ namespace Liberator.Driver
         /// Moves the virtual cursor position to a WebElement which acts as a menu and hovers
         /// </summary>
         /// <param name="element">The WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void HoverOverMenu(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -25,10 +25,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Hovering over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the hover command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the hover command."); }
                 HandleErrors(ex);
             }
         }
@@ -37,20 +38,21 @@ namespace Liberator.Driver
         /// Moves the virtual cursor position to a WebElement which acts as a menu and hovers
         /// </summary>
         /// <param name="locator">The locator for the WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void HoverOverMenu(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Hovering over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the hover command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the hover command."); }
                 HandleErrors(ex);
             }
         }
@@ -59,7 +61,7 @@ namespace Liberator.Driver
         /// Clicks on a WebElement acting as a menu and continues to hover
         /// </summary>
         /// <param name="element">The WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickAndHoverOverMenu(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -68,10 +70,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).Click().Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Hovering over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the click and hover command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the click and hover command."); }
                 HandleErrors(ex);
             }
         }
@@ -80,20 +83,21 @@ namespace Liberator.Driver
         /// Clicks on a WebElement acting as a menu and continues to hover
         /// </summary>
         /// <param name="locator">The locator for the WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickAndHoverOverMenu(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).Click().Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Hovering over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the click and hover command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the click and hover command."); }
                 HandleErrors(ex);
             }
         }
@@ -102,7 +106,7 @@ namespace Liberator.Driver
         /// Clicks on a WebElement acting as a menu and continues to hold
         /// </summary>
         /// <param name="element">The WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickAndHoldMenu(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -111,11 +115,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).ClickAndHold().Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Clicking and holding over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the click and hold command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the click and hold command."); }
                 HandleErrors(ex);
             }
         }
@@ -124,21 +128,21 @@ namespace Liberator.Driver
         /// Clicks on a WebElement acting as a menu and continues to hold
         /// </summary>
         /// <param name="locator">The locator for the WebElement acting as a menu</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickAndHoldMenu(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).ClickAndHold().Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Clicking and holding over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute the click and hold command."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute the click and hold command."); }
                 HandleErrors(ex);
             }
         }
@@ -147,7 +151,7 @@ namespace Liberator.Driver
         /// Clicks on an element and displays a contextual menu
         /// </summary>
         /// <param name="element">The WebElement which is the target of the contextual menu click</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickContextualMenu(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -156,10 +160,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).ContextClick().Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a contextual click on the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute a contextual click on the given element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute a contextual click on the given element."); }
                 HandleErrors(ex);
             }
         }
@@ -168,21 +173,21 @@ namespace Liberator.Driver
         /// Clicks on an element and displays a contextual menu
         /// </summary>
         /// <param name="locator">The locator for the WebElement which is the target of the contextual menu click</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ClickContextualMenu(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).ContextClick().Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a contextual click on the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute a contextual click on the given element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute a contextual click on the given element."); }
                 HandleErrors(ex);
             }
         }
@@ -191,7 +196,7 @@ namespace Liberator.Driver
         /// Double clicks on a WebElement
         /// </summary>
         /// <param name="element">The WebElement on which a double click is required</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void DoubleClick(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -200,11 +205,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).DoubleClick().Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a double click on the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute a double click on the given element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute a double click on the given element."); }
                 HandleErrors(ex);
             }
         }
@@ -213,21 +218,21 @@ namespace Liberator.Driver
         /// Double clicks on a WebElement
         /// </summary>
         /// <param name="locator">The locator for the WebElement which is the target of a double click</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void DoubleClick(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).DoubleClick().Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a double click on the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to execute a double click on the given element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to execute a double click on the given element."); }
                 HandleErrors(ex);
             }
         }
@@ -237,14 +242,16 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="source">The Web Element being dragged</param>
         /// <param name="target">The target WebElement for the action</param>
-        /// <param name="waitForSource">(Optional parameter) Whether to wait for the cliackability of the source element</param>
-        /// <param name="waitForTarget">(Optional parameter) Whether to wait for the cliackability of the target element</param>
+        /// <param name="waitForSource">(Optional parameter) Whether to wait for the clickability of the source element</param>
+        /// <param name="waitForTarget">(Optional parameter) Whether to wait for the clickability of the target element</param>
         public void DragAndDrop(IWebElement source, IWebElement target, [Optional, DefaultParameterValue(true)] bool waitForSource, [Optional, DefaultParameterValue(true)] bool waitForTarget)
         {
             Element = source;
-            var list = new List<IWebElement>();
-            list.Add(source);
-            list.Add(target);
+            List<IWebElement> list = new List<IWebElement>
+            {
+                source,
+                target
+            };
             Elements = list;
 
             try
@@ -252,11 +259,12 @@ namespace Liberator.Driver
                 if (waitForSource) { WaitForElementToBeClickable(source); }
                 if (waitForTarget) { WaitForElementToBeClickable(target); }
                 _action = HoverAction(source);
-                _action.MoveToElement(_element).DragAndDrop(source, target).Build().Perform();
+                _action.MoveToElement(Element).DragAndDrop(source, target).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Dragged an {0} element to an {1} element.", source.TagName, target.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to drag and drop the given element to the given target."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to drag and drop the given element to the given target."); }
                 HandleErrors(ex);
             }
         }
@@ -266,33 +274,38 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="source">The locator for the Web Element being dragged</param>
         /// <param name="target">The locator for the target WebElement for the action</param>
-        /// <param name="waitForSource">(Optional parameter) Whether to wait for the cliackability of the source element</param>
-        /// <param name="waitForTarget">(Optional parameter) Whether to wait for the cliackability of the target element</param>
+        /// <param name="waitForSource">(Optional parameter) Whether to wait for the clickability of the source element</param>
+        /// <param name="waitForTarget">(Optional parameter) Whether to wait for the clickability of the target element</param>
         public void DragAndDrop(By source, By target, [Optional, DefaultParameterValue(true)] bool waitForSource, [Optional, DefaultParameterValue(true)] bool waitForTarget)
         {
             Locator = source;
-            Locators = new List<By>();
-            Locators.Add(source);
-            Locators.Add(target);
+            Locators = new List<By>
+            {
+                source,
+                target
+            };
             try
             {
-                Element = _driver.FindElement(source);
-                var _target = _driver.FindElement(target);
-                var list = new List<IWebElement>();
-                list.Add(Element);
-                list.Add(_target);
+                Element = Driver.FindElement(source);
+                var _target = Driver.FindElement(target);
+                var list = new List<IWebElement>
+                {
+                    Element,
+                    _target
+                };
 
-                Elements = (IEnumerable<IWebElement>)list;
+                Elements = list;
 
                 if (waitForSource) { WaitForElementToBeClickable(source); }
                 if (waitForTarget) { WaitForElementToBeClickable(target); }
 
                 _action = HoverAction(source);
-                _action.MoveToElement(_element).DragAndDrop(Element, _target).Build().Perform();
+                _action.MoveToElement(Element).DragAndDrop(Element, _target).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Dragged an <{0}> element to an <{1}> element.", Element.TagName, _target.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to drag and drop the given element to the given target."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to drag and drop the given element to the given target."); }
                 HandleErrors(ex);
             }
         }
@@ -303,7 +316,7 @@ namespace Liberator.Driver
         /// <param name="element">The WebElement being dragged</param>
         /// <param name="xOffset">The x coordinate of the offset position</param>
         /// <param name="yOffset">The y coordinate of the offset position</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void DragAndDropToOffset(IWebElement element, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -312,11 +325,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).DragAndDropToOffset(element, xOffset, yOffset).Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a drag and drop of the <{0}> element to the location X = {1}, Y = {2}.", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to drag and drop the given element to the given target."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to drag and drop the given element to the given target."); }
                 HandleErrors(ex);
             }
         }
@@ -327,21 +340,21 @@ namespace Liberator.Driver
         /// <param name="locator">The locator for the WebElement being dragged</param>
         /// <param name="xOffset">The x coordinate of the offset position</param>
         /// <param name="yOffset">The y coordinate of the offset position</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void DragAndDropToOffset(By locator, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).DragAndDropToOffset(Element, xOffset, yOffset).Build().Perform();
-
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Executed a drag and drop of the <{0}> element to the location X = {1}, Y = {2}.", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Failed to drag and drop the given element to the given target."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Failed to drag and drop the given element to the given target."); }
                 HandleErrors(ex);
             }
         }
@@ -351,7 +364,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The WebElement on which the key is to be pressed</param>
         /// <param name="key">The key to be pressed</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void KeyDownOnElement(IWebElement element, string key, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -360,10 +373,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).KeyDown(element, key).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Pressed the {0} key on the <{1}> element.", key, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to complete the key depression on the given element"); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to complete the key depression on the given element"); }
                 HandleErrors(ex);
             }
         }
@@ -373,20 +387,21 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the WebElement on which the key is to be pressed</param>
         /// <param name="key">The key to be pressed</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void KeyDownOnElement(By locator, string key, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
-                _action.MoveToElement(_driver.FindElement(locator)).KeyDown(Element, key).Build().Perform();
+                _action.MoveToElement(Driver.FindElement(locator)).KeyDown(Element, key).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Pressed the {0} key on the <{1}> element.", key, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to complete the key depression on the given element"); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to complete the key depression on the given element"); }
                 HandleErrors(ex);
             }
         }
@@ -396,7 +411,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The target WebElement for the key release</param>
         /// <param name="key">The key to be released</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void KeyUpOnElement(IWebElement element, string key, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -405,10 +420,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).KeyUp(element, key).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Released the {0} key on the <{1}> element.", key, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to complete the key release on the given element"); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to complete the key release on the given element"); }
                 HandleErrors(ex);
             }
         }
@@ -418,20 +434,21 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the target WebElement for the key release</param>
         /// <param name="key">The key to be released</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void KeyUpOnElement(By locator, string key, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).KeyUp(Element, key).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Released the {0} key on the <{1}> element.", key, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to complete the key release on the given element"); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to complete the key release on the given element"); }
                 HandleErrors(ex);
             }
         }
@@ -442,7 +459,7 @@ namespace Liberator.Driver
         /// <param name="element">The WebElement from which the cursor will move</param>
         /// <param name="xOffset">The x coordinate offset for the movement</param>
         /// <param name="yOffset">The y coordinate offset for the movement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void MoveByOffset(IWebElement element, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -451,10 +468,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).MoveByOffset(xOffset, yOffset).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Moved the <{0}> element to the point at X = {1}, Y = {2}", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to move the cursor to the specified point."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to move the cursor to the specified point."); }
                 HandleErrors(ex);
             }
         }
@@ -465,20 +483,21 @@ namespace Liberator.Driver
         /// <param name="locator">The locator for the WebElement from which the cursor will move</param>
         /// <param name="xOffset">The x coordinate offset for the movement</param>
         /// <param name="yOffset">The y coordinate offset for the movement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void MoveByOffset(By locator, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if(wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).MoveByOffset(xOffset, yOffset).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Moved the <{0}> element to the point at X = {1}, Y = {2}", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to move the cursor to the specified point."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to move the cursor to the specified point."); }
                 HandleErrors(ex);
             }
         }
@@ -489,7 +508,7 @@ namespace Liberator.Driver
         /// <param name="element">The WebElement from which the cursor will move</param>
         /// <param name="xOffset">The x coordinate offset for the movement</param>
         /// <param name="yOffset">The y coordinate offset for the movement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void MoveToElementWithOffset(IWebElement element, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -498,10 +517,11 @@ namespace Liberator.Driver
                 if(wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).MoveToElement(element, xOffset, yOffset).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Moved to the <{0}> element to the point at X = {1}, Y = {2}", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to move the cursor to the specified point."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to move the cursor to the specified point."); }
                 HandleErrors(ex);
             }
         }
@@ -512,20 +532,21 @@ namespace Liberator.Driver
         /// <param name="locator">The locator for the WebElement from which the cursor will move</param>
         /// <param name="xOffset">The x coordinate offset for the movement</param>
         /// <param name="yOffset">The y coordinate offset for the movement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void MoveToElementWithOffset(By locator, int xOffset, int yOffset, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if(wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).MoveToElement(Element, xOffset, yOffset).Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Moved to the <{0}> element to the point at X = {1}, Y = {2}", Element.TagName, xOffset, yOffset); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to move the cursor to the specified point."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to move the cursor to the specified point."); }
                 HandleErrors(ex);
             }
         }
@@ -534,7 +555,7 @@ namespace Liberator.Driver
         /// Releases the mouse button over a WebElement
         /// </summary>
         /// <param name="element">The WebElement over which to release the mouse button</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ReleaseMouseButton(IWebElement element, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -543,10 +564,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 _action = HoverAction(element);
                 _action.MoveToElement(element).Release().Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Released the mouse button over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to release the mouse button at the specified element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to release the mouse button at the specified element."); }
                 HandleErrors(ex);
             }
         }
@@ -555,20 +577,21 @@ namespace Liberator.Driver
         /// Releases the mouse button over a WebElement
         /// </summary>
         /// <param name="locator">The locator for the WebElement over which to release the mouse button</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void ReleaseMouseButton(By locator, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); }
                 _action = HoverAction(locator);
                 _action.MoveToElement(Element).Release().Build().Perform();
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Released the mouse button over the <{0}> element.", Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Unable to release the mouse button at the specified element."); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Unable to release the mouse button at the specified element."); }
                 HandleErrors(ex);
             }
         }
@@ -578,7 +601,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The WebElement that receives the keystrokes</param>
         /// <param name="text">The keystrokes that are to be sent to the WebElement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SendValueToField(IWebElement element, string text, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -588,10 +611,11 @@ namespace Liberator.Driver
                 element.Click();
                 element.Clear();
                 element.SendKeys(text);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Sent the text '{0}' to the <{1}> element.", text, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", text); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", text); }
                 HandleErrors(ex);
             }
         }
@@ -601,21 +625,22 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the WebElement that receives the keystrokes</param>
         /// <param name="text">The keystrokes that are to be sent to the WebElement</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SendValueToField(By locator, string text, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
             try
             {
-                Element = _driver.FindElement(locator);
+                Element = Driver.FindElement(locator);
                 if (wait) { WaitForElementToBeClickable(Element); } ;
                 Element.Click();
                 Element.Clear();
                 Element.SendKeys(text);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Sent the text '{0}' to the <{1}> element.", text, Element.TagName); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", text); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", text); }
                 HandleErrors(ex);
             }
         }
@@ -625,7 +650,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The dropdown menu</param>
         /// <param name="item">The item to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectItemFromDropdown(IWebElement element, string item, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -634,10 +659,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); } ;
                 SelectElement se = new SelectElement(element);
                 se.SelectByText(item);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the item '{0}' from the menu element.", item); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", item); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", item); }
                 HandleErrors(ex);
             }
         }
@@ -647,7 +673,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the dropdown menu</param>
         /// <param name="item">The item to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectItemFromDropdown(By locator, string item, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
@@ -657,10 +683,11 @@ namespace Liberator.Driver
                 if(wait) { WaitForElementToBeClickable(Element); }
                 SelectElement se = new SelectElement(Element);
                 se.SelectByText(item);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the item '{0}' from the menu element.", item); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", item); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", item); }
                 HandleErrors(ex);
             }
         }
@@ -670,7 +697,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The dropdown menu</param>
         /// <param name="row">The row to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectRowFromDropdown(IWebElement element, int row, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -679,10 +706,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); }
                 SelectElement se = new SelectElement(element);
                 se.SelectByIndex(row);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the row {0} from the menu element.", row); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", row.ToString()); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", row.ToString()); }
                 HandleErrors(ex);
             }
         }
@@ -692,7 +720,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the dropdown menu</param>
         /// <param name="row">The row to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectRowFromDropdown(By locator, int row, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
@@ -702,10 +730,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(Element); } ;
                 SelectElement se = new SelectElement(Element);
                 se.SelectByIndex(row);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the row {0} from the menu element.", row); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", row.ToString()); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", row.ToString()); }
                 HandleErrors(ex);
             }
         }
@@ -715,7 +744,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="element">The dropdown menu</param>
         /// <param name="value">The value to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectValueFromDropdown(IWebElement element, string value, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Element = element;
@@ -724,10 +753,11 @@ namespace Liberator.Driver
                 if (wait) { WaitForElementToBeClickable(element); } ;
                 SelectElement se = new SelectElement(element);
                 se.SelectByValue(value);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the item from the menu element with the value {0}.", value); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", value); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", value); }
                 HandleErrors(ex);
             }
         }
@@ -737,7 +767,7 @@ namespace Liberator.Driver
         /// </summary>
         /// <param name="locator">The locator for the dropdown menu</param>
         /// <param name="value">The value to choose</param>
-        /// <param name="wait">(Optional parameter) Whether to wait for the cliackability of the element</param>
+        /// <param name="wait">(Optional parameter) Whether to wait for the clickability of the element</param>
         public void SelectValueFromDropdown(By locator, string value, [Optional, DefaultParameterValue(true)] bool wait)
         {
             Locator = locator;
@@ -747,17 +777,18 @@ namespace Liberator.Driver
                 if(wait) { WaitForElementToBeClickable(Element); }
                 SelectElement se = new SelectElement(Element);
                 se.SelectByValue(value);
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Selecting the item from the menu element with the value {0}.", value); }
             }
             catch (Exception ex)
             {
-                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.WriteLine("Could to send the value {0} to the specified field.", value); }
+                if (_debugLevel == EnumConsoleDebugLevel.Human) { Console.Out.WriteLine("Could to send the value {0} to the specified field.", value); }
                 HandleErrors(ex);
             }
         }
 
         #endregion
 
-        //#region Touch Actions
+        #region Touch Actions
 
         ///// <summary>
         ///// Double taps on the WebElement
@@ -768,13 +799,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.DoubleTap(element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -789,13 +820,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.DoubleTap(Element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -811,13 +842,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Down(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -834,13 +865,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Down(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -857,13 +888,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Flick(element, x, y, speed).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -881,13 +912,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Flick(Element, x, y, speed).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -903,13 +934,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Flick(speedX, speedY).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -926,13 +957,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Flick(speedX, speedY).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -946,13 +977,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.LongPress(element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -967,13 +998,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.LongPress(Element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -989,13 +1020,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Move(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1012,13 +1043,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Move(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1034,13 +1065,13 @@ namespace Liberator.Driver
         //    Element = _element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Scroll(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1057,13 +1088,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Scroll(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1079,13 +1110,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Scroll(element, x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1102,13 +1133,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Scroll(Element, x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1122,13 +1153,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.SingleTap(element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1143,13 +1174,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.SingleTap(Element).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1165,13 +1196,13 @@ namespace Liberator.Driver
         //    Element = element;
         //    try
         //    {
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Up(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1188,13 +1219,13 @@ namespace Liberator.Driver
         //    try
         //    {
         //        Element = _driver.FindElement(locator);
-        //        var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
+        //        var wait = new WebDriverWait(_driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.ElementToBeClickable(Element));
         //        Touch = new TouchActions(_driver);
         //        Touch.Up(x, y).Build().Perform();
         //    }
         //    catch (Exception ex)
         //    {
-        //        Console.WriteLine("");
+        //        Console.Out.WriteLine("");
         //        HandleErrors(ex);
         //    }
         //}
@@ -1213,12 +1244,13 @@ namespace Liberator.Driver
             {
                 Screenshot s = ((ITakesScreenshot)Driver).GetScreenshot();
                 s.SaveAsFile(path, ScreenshotImageFormat.Jpeg);
+                Console.Out.WriteLine("Screenshot taken and saved to {0}.", path);
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not take a screenshot.");
+                    Console.Out.WriteLine("Could not take a screenshot.");
                 }
                 HandleErrors(ex);
             }
@@ -1234,13 +1266,12 @@ namespace Liberator.Driver
             {
                 IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
                 return js;
-
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not return the JavaScript Executor.");
+                    Console.Out.WriteLine("Could not return the JavaScript Executor.");
                 }
                 HandleErrors(ex);
                 return null;
@@ -1255,14 +1286,15 @@ namespace Liberator.Driver
         {
             try
             {
-                IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
+                IJavaScriptExecutor js = Scripts();
                 js.ExecuteScript(script);
+                Console.Out.WriteLine("Executed the sctipt '{0}'.", script);
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not execute the passed JavaScript.");
+                    Console.Out.WriteLine("Could not execute the passed JavaScript.");
                 }
                 HandleErrors(ex);
             }
@@ -1279,12 +1311,13 @@ namespace Liberator.Driver
             {
                 IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
                 js.ExecuteScript(script, parameters);
+                Console.Out.WriteLine("Executed the sctipt '{0}'.", script);
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not execute the passed JavaScript with the specified parameters.");
+                    Console.Out.WriteLine("Could not execute the passed JavaScript with the specified parameters.");
                 }
                 HandleErrors(ex);
             }
@@ -1300,12 +1333,13 @@ namespace Liberator.Driver
             {
                 IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
                 js.ExecuteAsyncScript(script);
+                Console.Out.WriteLine("Executed the sctipt '{0}'.", script);
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not execute the passed asynchronous JavaScript.");
+                    Console.Out.WriteLine("Could not execute the passed asynchronous JavaScript.");
                 }
                 HandleErrors(ex);
             }
@@ -1322,17 +1356,38 @@ namespace Liberator.Driver
             {
                 IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
                 js.ExecuteAsyncScript(script, parameters);
+                Console.Out.WriteLine("Executed the sctipt '{0}'.", script);
             }
             catch (Exception ex)
             {
-                if (Preferences.Preferences.DebugLevel == EnumConsoleDebugLevel.Human)
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
                 {
-                    Console.WriteLine("Could not execute the passed asynchronous JavaScript.");
+                    Console.Out.WriteLine("Could not execute the passed asynchronous JavaScript.");
                 }
                 HandleErrors(ex);
             }
         }
 
+        /// <summary>
+        /// Scrolls to an element using JavaScript
+        /// </summary>
+        /// <param name="webElement"></param>
+        public void ScrollToElement(IWebElement webElement)
+        {
+            try
+            {
+                IJavaScriptExecutor js = ((IJavaScriptExecutor)Driver);
+                js.ExecuteScript("arguments[0].scrollIntoView(true);", webElement);
+            }
+            catch (Exception ex)
+            {
+                if (Preferences.BaseSettings.DebugLevel == EnumConsoleDebugLevel.Human)
+                {
+                    Console.Out.WriteLine("Could not execute the passed asynchronous JavaScript.");
+                }
+                HandleErrors(ex);
+            }
+        }
         #endregion
     }
 }

@@ -3,13 +3,12 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Opera;
-using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Liberator.Driver
 {
@@ -22,7 +21,14 @@ namespace Liberator.Driver
         /// <returns>The encapsulated IWebDriver</returns>
         public IWebDriver ReturnEncapsulatedDriver()
         {
-            return Driver;
+            if (Driver != null)
+            {
+                return Driver;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -52,27 +58,28 @@ namespace Liberator.Driver
         {
             try
             {
-                if (typeof(TWebDriver) != typeof(PhantomJSDriver) && typeof(TWebDriver) != typeof(InternetExplorerDriver))
+                if (typeof(TWebDriver) != typeof(InternetExplorerDriver))
                 {
-                    _driver.Manage().Cookies.AddCookie(new Cookie(name, value));
+                    Driver.Manage().Cookies.AddCookie(new Cookie(name, value));
                 }
                 else if (typeof(TWebDriver) == typeof(InternetExplorerDriver))
                 {
                     string script = "document.cookie='" + name + "=" + value + "'";
-                    _driver.ExecuteJavaScript(script);
+                    Driver.ExecuteJavaScript(script);
                 }
                 else
                 {
                     ICookieJar cookieJar = Driver.Manage().Cookies;
                     cookieJar.AddCookie(new Cookie(name, value));
                 }
+                Console.Out.WriteLine("Cookie {0} has been added with a value {1}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -88,14 +95,15 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.AddCookie(new Cookie(name, value, path));
+                Driver.Manage().Cookies.AddCookie(new Cookie(name, value, path));
+                Console.Out.WriteLine("Cookie {0} has been added with a value {1}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -112,14 +120,15 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.AddCookie(new Cookie(name, value, path, expiry));
+                Driver.Manage().Cookies.AddCookie(new Cookie(name, value, path, expiry));
+                Console.Out.WriteLine("Cookie {0} has been added with a value {1}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -137,18 +146,19 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.AddCookie(new Cookie(name, value, domain, path, expiry));
+                Driver.Manage().Cookies.AddCookie(new Cookie(name, value, domain, path, expiry));
+                Console.Out.WriteLine("Cookie {0} has been added with a value {1}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(InvalidCookieDomainException))
                 {
-                    Console.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", name, domain);
+                    Console.Out.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", name, domain);
                 }
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -162,18 +172,19 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.AddCookie(cookie);
+                Driver.Manage().Cookies.AddCookie(cookie);
+                Console.Out.WriteLine("Cookie {0} has been added with a value {1}.", cookie.Name, cookie.Value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(InvalidCookieDomainException))
                 {
-                    Console.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", cookie.Name, cookie.Domain);
+                    Console.Out.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", cookie.Name, cookie.Domain);
                 }
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", cookie.Name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", cookie.Name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -187,11 +198,11 @@ namespace Liberator.Driver
         {
             try
             {
-                return _driver.Manage().Cookies.AllCookies;
+                return Driver.Manage().Cookies.AllCookies;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to acquire the collection of cookies from the browser.");
+                Console.Out.WriteLine("Unable to acquire the collection of cookies from the browser.");
                 HandleErrors(ex);
                 return null;
             }
@@ -204,11 +215,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.DeleteAllCookies();
+                Driver.Manage().Cookies.DeleteAllCookies();
+                Console.Out.WriteLine("All cookies have been deleted.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to delete cookies from the browser.");
+                Console.Out.WriteLine("Unable to delete cookies from the browser.");
                 HandleErrors(ex);
             }
         }
@@ -221,11 +233,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.DeleteCookie(cookie);
+                Driver.Manage().Cookies.DeleteCookie(cookie);
+                Console.Out.WriteLine("Cookie {0} has been deleted.", cookie);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to delete cookie {0} from the browser.", cookie.Name);
+                Console.Out.WriteLine("Unable to delete cookie {0} from the browser.", cookie.Name);
                 HandleErrors(ex);
             }
         }
@@ -238,12 +251,13 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Cookies.DeleteCookieNamed(cookie);
+                Driver.Manage().Cookies.DeleteCookieNamed(cookie);
+                Console.Out.WriteLine("Cookie {0} has been deleted.", cookie);
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine("Unable to delete the '{0}' cookie.", cookie);
+                Console.Out.WriteLine("Unable to delete the '{0}' cookie.", cookie);
                 HandleErrors(ex);
             }
         }
@@ -257,11 +271,11 @@ namespace Liberator.Driver
         {
             try
             {
-                return _driver.Manage().Cookies.GetCookieNamed(cookie);
+                return Driver.Manage().Cookies.GetCookieNamed(cookie);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get the '{0}' cookie.", cookie);
+                Console.Out.WriteLine("Unable to get the '{0}' cookie.", cookie);
                 HandleErrors(ex);
                 return null;
             }
@@ -278,13 +292,14 @@ namespace Liberator.Driver
             {
                 DeleteCookieNamed(name);
                 AddCookie(name, value);
+                Console.Out.WriteLine("Cookie {0} has been set to {2}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -302,13 +317,14 @@ namespace Liberator.Driver
             {
                 DeleteCookieNamed(name);
                 AddCookie(name, value, path);
+                Console.Out.WriteLine("Cookie {0} has been set to {2}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -327,13 +343,14 @@ namespace Liberator.Driver
             {
                 DeleteCookieNamed(name);
                 AddCookie(name, value, path, expiry);
+                Console.Out.WriteLine("Cookie {0} has been set to {2}.", name, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -353,17 +370,18 @@ namespace Liberator.Driver
             {
                 DeleteCookieNamed(name);
                 AddCookie(name, value, domain, path, expiry);
+                Console.Out.WriteLine("Cookie {0} for the domain {1} has been set to {2}.", name, domain, value);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(InvalidCookieDomainException))
                 {
-                    Console.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", name, domain);
+                    Console.Out.WriteLine("An attempt was made to set the {0} cookie for the domain {1}, which is not currently loaded.", name, domain);
                 }
                 if (ex.GetType() == typeof(UnableToSetCookieException))
                 {
-                    Console.WriteLine("Unable to set the cookie {0} as requested", name);
-                    if (Driver.Url == null) { Console.WriteLine("The driver is not currently set with a URL"); }
+                    Console.Out.WriteLine("Unable to set the cookie {0} as requested", name);
+                    if (Driver.Url == null) { Console.Out.WriteLine("The driver is not currently set with a URL"); }
                 }
                 HandleErrors(ex);
             }
@@ -379,14 +397,14 @@ namespace Liberator.Driver
             {
                 if (Driver.GetType() == typeof(FirefoxDriver) || Driver.GetType() == typeof(EdgeDriver) || Driver.GetType() == typeof(InternetExplorerDriver))
                 {
-                    Console.WriteLine("Logs are not currently available for Firefox, IE or Edge");
+                    Console.Out.WriteLine("Logs are not currently available for Firefox, IE or Edge");
                     return null;
                 }
-                return _driver.Manage().Logs.AvailableLogTypes;
+                return Driver.Manage().Logs.AvailableLogTypes;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to retrieve the current list of available log types for the {0} browser.", Driver.GetType().Name);
+                Console.Out.WriteLine("Unable to retrieve the current list of available log types for the {0} browser.", Driver.GetType().Name);
                 HandleErrors(ex);
                 return null;
             }
@@ -401,11 +419,11 @@ namespace Liberator.Driver
         {
             try
             {
-                return _driver.Manage().Logs.GetLog(logKind);
+                return Driver.Manage().Logs.GetLog(logKind);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get the log entries of '{0}' type from the {1} browser.", logKind, Driver.GetType().Name);
+                Console.Out.WriteLine("Unable to get the log entries of '{0}' type from the {1} browser.", logKind, Driver.GetType().Name);
                 HandleErrors(ex);
                 return null;
             }
@@ -421,11 +439,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Console.Out.WriteLine("Implicit wait set at {0}:{1}.{2}", minutes, seconds, milliseconds);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to set the implicit wait property.");
+                Console.Out.WriteLine("Unable to set the implicit wait property.");
                 HandleErrors(ex);
             }
         }
@@ -440,11 +459,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Timeouts().PageLoad = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Driver.Manage().Timeouts().PageLoad = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Console.Out.WriteLine("Page load timeout set at {0}:{1}.{2}", minutes, seconds, milliseconds);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to set the page load timeout property.");
+                Console.Out.WriteLine("Unable to set the page load timeout property.");
                 HandleErrors(ex);
             }
         }
@@ -459,11 +479,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Timeouts().AsynchronousJavaScript = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Driver.Manage().Timeouts().AsynchronousJavaScript = new TimeSpan(0, 0, minutes, seconds, milliseconds);
+                Console.Out.WriteLine("Script timeout set at {0}:{1}.{2}", minutes, seconds, milliseconds);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to set the asynchronous java script property.");
+                Console.Out.WriteLine("Unable to set the asynchronous java script property.");
                 HandleErrors(ex);
             }
         }
@@ -475,18 +496,19 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Manage().Window.Maximize();
+                Driver.Manage().Window.Maximize();
+                Console.Out.WriteLine("Browser window has been maximised.");
             }
             catch (Exception ex)
             {
                 if (Driver.GetType() == typeof(FirefoxDriver))
                 {
-                    Console.WriteLine("Firefox 54 has introduces an issue which causes incorrect error messages on maximise.");
+                    Console.Out.WriteLine("Firefox 54 has introduces an issue which causes incorrect error messages on maximise.");
                 }
                 else
                 {
-                    Console.WriteLine("Unable to Maximise Window.");
-                    if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                    Console.Out.WriteLine("Unable to Maximise Window.");
+                    if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                     HandleErrors(ex);
                 }
             }
@@ -500,14 +522,15 @@ namespace Liberator.Driver
         {
             try
             {
-                int x = _driver.Manage().Window.Position.X;
-                int y = _driver.Manage().Window.Position.Y;
+                int x = Driver.Manage().Window.Position.X;
+                int y = Driver.Manage().Window.Position.Y;
+                Console.Out.WriteLine("Window position found as: {0} by {1}", x, y);
                 return new Tuple<int, int>(x, y);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get current window position.");
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                Console.Out.WriteLine("Unable to get current window position.");
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
                 return null;
             }
@@ -521,14 +544,15 @@ namespace Liberator.Driver
         {
             try
             {
-                int x = _driver.Manage().Window.Size.Width;
-                int y = _driver.Manage().Window.Size.Height;
+                int x = Driver.Manage().Window.Size.Width;
+                int y = Driver.Manage().Window.Size.Height;
+                Console.Out.WriteLine("Window size found as: {0} by {1}", x, y);
                 return new Tuple<int, int>(x, y);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get current window size.");
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                Console.Out.WriteLine("Unable to get current window size.");
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
                 return null;
             }
@@ -544,11 +568,12 @@ namespace Liberator.Driver
             try
             {
                 Driver.Manage().Window.Size = new Size(width, height);
+                Console.Out.WriteLine("Resized the browser window to {0} by {1}.", width, height);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get set the current window size.");
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                Console.Out.WriteLine("Unable to get set the current window size.");
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
             }
         }
@@ -560,13 +585,17 @@ namespace Liberator.Driver
         {
             try
             {
-                _lastPage = _driver.FindElement(By.TagName("html"));
-                _driver.Navigate().Back();
-                var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.StalenessOf(_lastPage));
+                LastPage = Driver.FindElement(By.TagName("html"));
+                Driver.Navigate().Back();
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    var wait = new WebDriverWait(Driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.StalenessOf(LastPage));
+                }
+                Console.Out.WriteLine("Pressed the back button.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to press the back button.");
+                Console.Out.WriteLine("Unable to press the back button.");
                 HandleErrors(ex);
             }
         }
@@ -578,13 +607,17 @@ namespace Liberator.Driver
         {
             try
             {
-                _lastPage = _driver.FindElement(By.TagName("html"));
-                _driver.Navigate().Forward();
-                var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.StalenessOf(_lastPage));
+                LastPage = Driver.FindElement(By.TagName("html"));
+                Driver.Navigate().Forward();
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    var wait = new WebDriverWait(Driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.StalenessOf(LastPage));
+                }
+                Console.Out.WriteLine("Pressed the forward button.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to press the forward button.");
+                Console.Out.WriteLine("Unable to press the forward button.");
                 HandleErrors(ex);
             }
         }
@@ -598,12 +631,13 @@ namespace Liberator.Driver
             try
             {
                 IWebElement currentPage = Driver.FindElement(By.TagName("html"));
-                _driver.Navigate().GoToUrl(url);
+                Driver.Navigate().GoToUrl(url);
                 WaitForPageToLoad(currentPage);
+                Console.Out.WriteLine("Loaded the URL: {0}.", url);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to navigate to the page '{0}'.", url);
+                Console.Out.WriteLine("Unable to navigate to the page '{0}'.", url);
                 HandleErrors(ex);
             }
         }
@@ -617,12 +651,13 @@ namespace Liberator.Driver
             try
             {
                 IWebElement currentPage = Driver.FindElement(By.TagName("html"));
-                _driver.Navigate().GoToUrl(url);
+                Driver.Navigate().GoToUrl(url);
                 WaitForPageToLoad(currentPage);
+                Console.Out.WriteLine("Loaded the URL: {0}.", url.AbsoluteUri);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to navigate to the page '{0}'.", url.ToString());
+                Console.Out.WriteLine("Unable to navigate to the page '{0}'.", url.ToString());
                 HandleErrors(ex);
             }
         }
@@ -634,11 +669,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.Navigate().Refresh();
+                Driver.Navigate().Refresh();
+                Console.Out.WriteLine("Refreshed the browser.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to refresh the browser.");
+                Console.Out.WriteLine("Unable to refresh the browser.");
                 HandleErrors(ex);
             }
         }
@@ -652,11 +688,11 @@ namespace Liberator.Driver
         {
             try
             {
-                return _driver.PageSource.Contains(text);
+                return Driver.PageSource.Contains(text);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to find the text '{0}' in the source code of the page.", text);
+                Console.Out.WriteLine("Unable to find the text '{0}' in the source code of the page.", text);
                 HandleErrors(ex);
                 return false;
             }
@@ -670,11 +706,11 @@ namespace Liberator.Driver
         {
             try
             {
-                return _driver.PageSource;
+                return Driver.PageSource;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to get the source code of the page.");
+                Console.Out.WriteLine("Unable to get the source code of the page.");
                 HandleErrors(ex);
                 return null;
             }
@@ -691,22 +727,27 @@ namespace Liberator.Driver
                 {
                     foreach (string handle in Driver.WindowHandles)
                     {
-                        _driver.SwitchTo().Window(handle);
-                        _driver.Close();
-                    } 
+                        Driver.SwitchTo().Window(handle);
+                        Driver.Close();
+                        DriverName = null;
+                    }
                 }
-                _driver.Quit();
-                KillDrivers();
+                if (Driver != null)
+                {
+                    Driver.Quit();
+                    KillTestProcesses();
+                    DriverName = null;
+                }
             }
             catch (Exception ex)
             {
                 if (Driver.GetType() == typeof(FirefoxDriver))
                 {
-                    Console.WriteLine("Error message due to a anomaly in either geckodriver or firefox pertaining to closing the driver");
+                    Console.Out.WriteLine("Error message due to a anomaly in either geckodriver or firefox pertaining to closing the driver");
                 }
                 else
                 {
-                    Console.WriteLine("Unable to close all associated browser windows. Please review test code and browser status.");
+                    Console.Out.WriteLine("Unable to close all associated browser windows. Please review test code and browser status.");
                     HandleErrors(ex);
                 }
 
@@ -737,12 +778,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.SwitchTo().ActiveElement();
+                Driver.SwitchTo().ActiveElement();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to switch to the active element");
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                Console.Out.WriteLine("Unable to switch to the active element");
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
             }
         }
@@ -754,15 +795,15 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.SwitchTo().Alert();
+                Driver.SwitchTo().Alert();
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoAlertPresentException))
                 {
-                    Console.WriteLine("Unable to switch to an alert dialog as one is not present on on the current page.");
+                    Console.Out.WriteLine("Unable to switch to an alert dialog as one is not present on on the current page.");
                 }
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
             }
         }
@@ -774,12 +815,12 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.SwitchTo().DefaultContent();
+                Driver.SwitchTo().DefaultContent();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to switch the focus of the driver back to the default content.");
-                if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                Console.Out.WriteLine("Unable to switch the focus of the driver back to the default content.");
+                if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 HandleErrors(ex);
             }
         }
@@ -792,14 +833,14 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.SwitchTo().Frame(frameIndex);
+                Driver.SwitchTo().Frame(frameIndex);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoSuchFrameException))
                 {
-                    Console.WriteLine("Unable to switch to the requested frame, as there is no frame with an index of {0}", frameIndex);
-                    if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                    Console.Out.WriteLine("Unable to switch to the requested frame, as there is no frame with an index of {0}", frameIndex);
+                    if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 }
                 HandleErrors(ex);
             }
@@ -814,14 +855,14 @@ namespace Liberator.Driver
             Element = frameElement;
             try
             {
-                _driver.SwitchTo().Frame(Element);
+                Driver.SwitchTo().Frame(Element);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoSuchFrameException))
                 {
-                    Console.WriteLine("Unable to switch to the requested frame, as there is no frame with the passed description");
-                    if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                    Console.Out.WriteLine("Unable to switch to the requested frame, as there is no frame with the passed description");
+                    if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 }
                 HandleErrors(ex);
             }
@@ -836,16 +877,16 @@ namespace Liberator.Driver
             Locator = frameLocator;
             try
             {
-                var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(frameLocator));
-                Element = _driver.FindElement(frameLocator);
-                _driver.SwitchTo().Frame(Element);
+                var wait = new WebDriverWait(Driver, Preferences.BaseSettings.Timeout).Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(frameLocator));
+                Element = Driver.FindElement(frameLocator);
+                Driver.SwitchTo().Frame(Element);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoSuchFrameException))
                 {
-                    Console.WriteLine("Unable to switch to the requested frame, as there is no frame with the description {0}", frameLocator);
-                    if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                    Console.Out.WriteLine("Unable to switch to the requested frame, as there is no frame with the description {0}", frameLocator);
+                    if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 }
                 HandleErrors(ex);
             }
@@ -859,15 +900,16 @@ namespace Liberator.Driver
         {
             try
             {
-                var wait = new WebDriverWait(_driver, _timeout).Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(By.Name(frameName)));
-                _driver.SwitchTo().Frame(frameName);
+                var wait = new WebDriverWait(Driver, Preferences.BaseSettings.Timeout)
+                    .Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(By.Name(frameName)));
+                Driver.SwitchTo().Frame(frameName);
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoSuchFrameException))
                 {
-                    Console.WriteLine("Unable to switch to the requested frame, as there is no frame with the name {0}", frameName);
-                    if (_driver.WindowHandles.Count == 0) { Console.WriteLine("No window is currently attached to the driver."); }
+                    Console.Out.WriteLine("Unable to switch to the requested frame, as there is no frame with the name {0}", frameName);
+                    if (Driver.WindowHandles.Count == 0) { Console.Out.WriteLine("No window is currently attached to the driver."); }
                 }
                 HandleErrors(ex);
             }
@@ -880,35 +922,15 @@ namespace Liberator.Driver
         {
             try
             {
-                _driver.SwitchTo().ParentFrame();
+                Driver.SwitchTo().ParentFrame();
             }
             catch (Exception ex)
             {
                 if (ex.GetType() == typeof(NoSuchFrameException))
                 {
-                    Console.WriteLine("Cannot switch to a parent frame as the current frame does not have a parent");
+                    Console.Out.WriteLine("Cannot switch to a parent frame as the current frame does not have a parent");
                 }
                 HandleErrors(ex);
-            }
-        }
-
-
-
-        private void KillDrivers()
-        {
-            Process[] processList = Process.GetProcesses();
-            foreach (Process item in processList)
-            {
-                if (item.ProcessName.Contains("geckodriver") ||
-                    item.ProcessName.Contains("chromedriver") ||
-                    item.ProcessName.Contains("MicrosoftWebDriver") ||
-                    item.ProcessName.Contains("opera") ||
-                    item.ProcessName.Contains("phantomjs") ||
-                    item.ProcessName.Contains("IEDriverServer") ||
-                    item.ProcessName.Contains("iexplore.exe"))
-                {
-                    item.Kill();
-                }
             }
         }
     }
